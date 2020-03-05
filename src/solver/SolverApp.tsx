@@ -2,6 +2,7 @@ import React from 'react';
 import { HintedPuzzle, HintCell, Grid, GridCell, Solver, SolveResult, Strategies, SolveCell } from 'snakeegg';
 import { GridView } from '../grid/GridView';
 import { List } from "immutable";
+import { Grid as MuiGrid, Container, Box } from "@material-ui/core";
 
 
 type SolverAppState = {
@@ -71,43 +72,50 @@ export class SolverApp extends React.Component<{}, SolverAppState>  {
         const { currentStepNum, solveResult } = this.state;
         const grid = this.getGrid(currentStepNum);
 
-        return <div className="solver-app">
-            <div className="solver-main">
-                {grid && (<GridView grid={grid} />)}
-                {!grid && (<p>no grid</p>)}
-            </div>
-            <div className="solver-control">
-                <ul>
-                    <li>
-                        Has solution: {solveResult.hasSolution}
-                    </li>
-                    <li>
-                        Step: {currentStepNum} / {solveResult.steps.size}
-                    </li>
-                    <li>
-                        <button onClick={() => this.stepForward()}>Step {'>'}</button>
-                    </li>
-                    <li>
-                        <button onClick={() => this.stepBack()}>{'<'} Step</button>
-                    </li>
-                    <li>
-                        <button onClick={() => this.showInitialPuzzle()}>Show initial puzzle</button>
-                    </li>
-                    <li>
-                        <button onClick={() => this.showSolution()}>Show solution</button>
-                    </li>
-                </ul>
-            </div>
-            <div className="solver-strategies">
-                <ul>
-                    {Strategies.map((strategy) => (
-                        <li key={strategy.constructor.name}>
-                            {strategy.constructor.name}
-                        </li>
-                    ))}
-                </ul>
-            </div>
-        </div>;
+        return <Container>
+            <Container>
+                <h1>Snake Egg solver</h1>
+            </Container>
+            <MuiGrid container spacing={3}>
+                <MuiGrid item xs={12} sm={6}>
+                    {grid && (<GridView grid={grid} />)}
+                    {!grid && (<p>no grid</p>)}
+                </MuiGrid>
+                <MuiGrid item xs={12} sm={6}>
+                    <Box>
+                        <ul>
+                            <li>
+                                Has solution: {solveResult.hasSolution ? 'yes' : 'no'}
+                            </li>
+                            <li>
+                                Step: {currentStepNum} / {solveResult.steps.size}
+                            </li>
+                            <li>
+                                <button onClick={() => this.stepForward()}>Step {'>'}</button>
+                            </li>
+                            <li>
+                                <button onClick={() => this.stepBack()}>{'<'} Step</button>
+                            </li>
+                            <li>
+                                <button onClick={() => this.showInitialPuzzle()}>Show initial puzzle</button>
+                            </li>
+                            <li>
+                                <button onClick={() => this.showSolution()}>Show solution</button>
+                            </li>
+                        </ul>
+                    </Box>
+                    <Box>
+                        <ul>
+                            {Strategies.map((strategy) => (
+                                <li key={strategy.constructor.name}>
+                                    {strategy.constructor.name}
+                                </li>
+                            ))}
+                        </ul>
+                    </Box>
+                </MuiGrid>
+            </MuiGrid>
+        </Container>;
     }
 
 }

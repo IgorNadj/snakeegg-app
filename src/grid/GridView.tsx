@@ -14,12 +14,14 @@ export class GridView extends React.Component<GridViewProps> {
 
         return (
             <div className="grid">
-                <table>
+                <table style={{ borderCollapse: 'collapse' }}>
                     <tbody>
                         {gridArray.map((row, rowIndex) => (
-                            <tr key={rowIndex}>
+                            <tr style={{ height: 30, minHeight: 30 }} key={rowIndex}>
                                 {row.map((cell, colIndex) => (
-                                    <td key={colIndex}>{cell}</td>
+                                    <td style={{ width: 30, minWidth: 30, textAlign: "center", borderStyle: 'solid', borderColor: '#aaa', borderWidth: 1 }} key={colIndex}>
+                                        {cell}
+                                    </td>
                                 ))}
                             </tr>
                         ))}
