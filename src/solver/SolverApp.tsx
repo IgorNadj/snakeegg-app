@@ -78,8 +78,22 @@ export class SolverApp extends React.Component<{}, SolverAppState>  {
             </Container>
             <MuiGrid container spacing={3}>
                 <MuiGrid item xs={12} sm={6}>
-                    {grid && (<GridView grid={grid} />)}
-                    {!grid && (<p>no grid</p>)}
+                    <Box>
+                        {grid && (<GridView grid={grid} />)}
+                        {!grid && (<p>no grid</p>)}
+                    </Box>
+                    <Box>
+                        <h2>Steps</h2>
+                        <ol>
+                            {solveResult.steps.map((solveStep, index) => (
+                                <li key={index}>
+                                    <div style={{ textOverflow: 'ellipsis', overflow: 'hidden', fontWeight: index === currentStepNum - 1 ? 'bold' : 'normal' }}>
+                                        {solveStep.strategy.constructor.name}
+                                    </div>
+                                </li>
+                            ))}
+                        </ol>
+                    </Box>
                 </MuiGrid>
                 <MuiGrid item xs={12} sm={6}>
                     <Box>
@@ -105,10 +119,13 @@ export class SolverApp extends React.Component<{}, SolverAppState>  {
                         </ul>
                     </Box>
                     <Box>
+                        <h2>Strategies</h2>
                         <ul>
                             {Strategies.map((strategy) => (
-                                <li key={strategy.constructor.name}>
-                                    {strategy.constructor.name}
+                                <li key={strategy.constructor.name} >
+                                    <div style={{ textOverflow: 'ellipsis', overflow: 'hidden' }}>
+                                        {strategy.constructor.name}
+                                    </div>
                                 </li>
                             ))}
                         </ul>
