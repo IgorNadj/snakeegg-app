@@ -1,7 +1,7 @@
 import React from 'react';
-import { HintedPuzzle, HintCell, Grid, GridCell, Solver, SolveResult, Strategies, SolveCell } from 'snakeegg';
+import { HintedPuzzle, HintCell, Grid, GridCell, Solver, SolveResult, Strategies, SolveCell, PointInt, SolveStep } from 'snakeegg';
 import { GridView } from '../grid/GridView';
-import { List } from "immutable";
+import { List, Set } from "immutable";
 import { Grid as MuiGrid, Container, Box } from "@material-ui/core";
 
 
@@ -55,22 +55,27 @@ export class SolverApp extends React.Component<{}, SolverAppState>  {
         this.setState({ currentStepNum: 0 });
     }
 
-    protected getGrid(stepNum: number): Grid<SolveCell> {
+    protected getSolveStep(stepNum: number): SolveStep | null {
         if (stepNum === 0) {
-            return this.state.solveResult.initial.getSolveGrid();
+            return null;
         } else {
             const step = this.state.solveResult.steps.get(stepNum - 1);
             if (!step) {
                 // typescript safety check, should never happen
                 throw 'step not found';
             }
-            return step.after.getSolveGrid();
+            return step;
         }
     }
 
     render() {
         const { currentStepNum, solveResult } = this.state;
-        const grid = this.getGrid(currentStepNum);
+
+        const currentStep = this.getSolveStep(currentStepNum);
+
+        const currentPuzzle = currentStep ? currentStep.after : this.state.solveResult.initial;
+
+        const grid = currentPuzzle.getSolveGrid();
 
         return <Container>
             <Container>
@@ -79,7 +84,7 @@ export class SolverApp extends React.Component<{}, SolverAppState>  {
             <MuiGrid container spacing={3}>
                 <MuiGrid item xs={12} sm={6}>
                     <Box>
-                        {grid && (<GridView grid={grid} />)}
+                        {grid && (<GridView grid={grid} highlighted={currentStep?.affectedCells} />)}
                         {!grid && (<p>no grid</p>)}
                     </Box>
                     <Box>
