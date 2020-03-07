@@ -3,6 +3,7 @@ import { HintedPuzzle, HintCell, Grid, GridCell, Solver, SolveResult, Strategies
 import { GridView } from '../grid/GridView';
 import { List, Set } from "immutable";
 import { Grid as MuiGrid, Container, Box } from "@material-ui/core";
+import { SolveStepsView } from './SolveStepsView';
 
 
 type SolverAppState = {
@@ -89,15 +90,7 @@ export class SolverApp extends React.Component<{}, SolverAppState>  {
                     </Box>
                     <Box>
                         <h2>Steps</h2>
-                        <ol>
-                            {solveResult.steps.map((solveStep, index) => (
-                                <li key={index}>
-                                    <div style={{ textOverflow: 'ellipsis', overflow: 'hidden', fontWeight: index === currentStepNum - 1 ? 'bold' : 'normal' }}>
-                                        {solveStep.strategy.constructor.name}
-                                    </div>
-                                </li>
-                            ))}
-                        </ol>
+                        <SolveStepsView steps={solveResult.steps} currentStepNum={currentStepNum} />
                     </Box>
                 </MuiGrid>
                 <MuiGrid item xs={12} sm={6}>
