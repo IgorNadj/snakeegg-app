@@ -4,6 +4,7 @@ import { GridView } from '../grid/GridView';
 import { List, Set } from "immutable";
 import { Grid as MuiGrid, Container, Box } from "@material-ui/core";
 import { SolveStepsView } from './SolveStepsView';
+import { SolverControls } from './SolverControls';
 
 
 type SolverAppState = {
@@ -36,24 +37,8 @@ export class SolverApp extends React.Component<{}, SolverAppState>  {
         return solver.solve(hintedPuzzle);
     }
 
-    protected stepForward() {
-        if (this.state.currentStepNum < this.state.solveResult.steps.size) {
-            this.setState({ currentStepNum: this.state.currentStepNum + 1 });
-        }
-    }
-
-    protected stepBack() {
-        if (this.state.currentStepNum > 0) {
-            this.setState({ currentStepNum: this.state.currentStepNum - 1 });
-        }
-    }
-
-    protected showSolution() {
-        this.setState({ currentStepNum: this.state.solveResult.steps.size });
-    }
-
-    protected showInitialPuzzle() {
-        this.setState({ currentStepNum: 0 });
+    protected setStepNumber(stepNum: number) {
+        this.setState({ currentStepNum: stepNum });
     }
 
     protected getSolveStep(stepNum: number): SolveStep | null {
@@ -95,26 +80,7 @@ export class SolverApp extends React.Component<{}, SolverAppState>  {
                 </MuiGrid>
                 <MuiGrid item xs={12} sm={6}>
                     <Box>
-                        <ul>
-                            <li>
-                                Has solution: {solveResult.hasSolution ? 'yes' : 'no'}
-                            </li>
-                            <li>
-                                Step: {currentStepNum} / {solveResult.steps.size}
-                            </li>
-                            <li>
-                                <button onClick={() => this.stepForward()}>Step {'>'}</button>
-                            </li>
-                            <li>
-                                <button onClick={() => this.stepBack()}>{'<'} Step</button>
-                            </li>
-                            <li>
-                                <button onClick={() => this.showInitialPuzzle()}>Show initial puzzle</button>
-                            </li>
-                            <li>
-                                <button onClick={() => this.showSolution()}>Show solution</button>
-                            </li>
-                        </ul>
+                        <SolverControls solveResult={solveResult} currentStepNum={currentStepNum} setStepNumber={(stepNum) => this.setStepNumber(stepNum)} />
                     </Box>
                     <Box>
                         <h2>Strategies</h2>
